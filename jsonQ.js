@@ -4,14 +4,14 @@
  *s-yadav.github.com
  *Copyright (c) 2013 Sudhanshu Yadav.
  *Dual licensed under the MIT and GPL licenses
- */;
+ */
 
 //initialize jsonQ
 ;(function (window, document, undefined) {
-		var jsonQ = function (json) {
-			//return a jsonQ object
-			return new jsonQ.fn.init(json);
-		},
+    var jsonQ = function (json) {
+        //return a jsonQ object
+        return new jsonQ.fn.init(json);
+    },
 
         //plugin variable and methods
         error = function (msg) {
@@ -32,7 +32,7 @@
         }
     }
 
-	
+
 
     //to make jsonQ accessible outside	
     window.jsonQ = jsonQ;
@@ -91,37 +91,35 @@
 
     //traverse functions
     var tFunc = {
-		//search on top level
+        //search on top level
         topLevel: function (option) {
             var current = this.jsonQ_current,
                 newObj = this.cloneObj(jsonQ()),
                 newCurrent = newObj.jsonQ_current = [],
                 prevPathStr = '',
-				key=option.key,
-				method=option.method;				
+                key = option.key,
+                method = option.method;
 
             for (var i = 0, ln = current.length; i < ln; i++) {
                 var pathC = current[i].path,
                     pathStr,
-                    outofBound=false,
-                    parPath = pathC.length!=0?pathC.join('~~').split('~~'):[];
+                    outofBound = false,
+                    parPath = pathC.length != 0 ? pathC.join('~~').split('~~') : [];
 
                 //to run callback to apply top traverse logic
                 if (method == 'parent') {
-                    if(parPath.length==0){
-                    	 outofBound=true;
-                    	}
-                    else{	
-                    	parPath.pop();
+                    if (parPath.length == 0) {
+                        outofBound = true;
+                    } else {
+                        parPath.pop();
                     }
                 } else {
                     var keyIndex = parPath.lastIndexOf(key);
-					if(keyIndex==-1){
-						outofBound=true;
-					}
-					else{
-                    	parPath = parPath.slice(0, keyIndex + 1);
-                	}
+                    if (keyIndex == -1) {
+                        outofBound = true;
+                    } else {
+                        parPath = parPath.slice(0, keyIndex + 1);
+                    }
                 }
 
                 var pathStr = JSON.stringify(parPath);
@@ -134,16 +132,16 @@
 
                 prevPathStr = pathStr;
             }
-            
-			//set other defination variables
-			newObj.length=newCurrent.length;
-			//to add selector
-			newObj.selector.push({
-					method:method,
-					key:key
-				});
-			
-			return newObj;
+
+            //set other defination variables
+            newObj.length = newCurrent.length;
+            //to add selector
+            newObj.selector.push({
+                method: method,
+                key: key
+            });
+
+            return newObj;
         },
         //travese which have qualifiers mainly on bottom and sibling method
         qualTrv: function (option) {
@@ -152,9 +150,9 @@
                 newCurrent = newObj.jsonQ_current = [],
 
                 //key element (an array of paths with following key)
-				key=option.key,
-				//dont work with original object clone it and if undefined than make as empty array
-                elm = jsonQ.clone(this[key])||[],
+                key = option.key,
+                //dont work with original object clone it and if undefined than make as empty array
+                elm = jsonQ.clone(this[key]) || [],
                 //qualifier
                 qualifier = option.qualifier,
                 qType = objType(qualifier),
@@ -165,13 +163,13 @@
             for (var i = 0, ln = current.length; i < ln; i++) {
                 var pathC = current[i].path,
                     found = false;
-				
-				
+
+
                 if (!find) {
-					//if it is top level continue the loop. This case comes when we do sibling method called on initial object
-					if(pathC.length==0){
-						continue;
-					}
+                    //if it is top level continue the loop. This case comes when we do sibling method called on initial object
+                    if (pathC.length == 0) {
+                        continue;
+                    }
 
                     var pathCTemp = pathC.join('~~').split('~~');
                     pathCTemp.pop();
@@ -216,17 +214,17 @@
                 newObj = this.filter.call(newObj, qualifier);
             }
 
-			//set other defination variables
-			newObj.length=newObj.jsonQ_current.length;
+            //set other defination variables
+            newObj.length = newObj.jsonQ_current.length;
 
-			//to add selector
-			newObj.selector.push({
-					method:method,
-					key:key,
-					qualifier:qualifier
-				});
+            //to add selector
+            newObj.selector.push({
+                method: method,
+                key: key,
+                qualifier: qualifier
+            });
 
-			
+
             return newObj;
         },
         qTest: function (qType, qualifier, path, array) {
@@ -242,36 +240,36 @@
         }
 
     };
-	
-	//functions involved on sorting
-	var sortFunc={
-		baseConv:function(type,val,settings){
-                if (type == 'string') {
-                    if (settings.caseIgnore) {
-                        return val.toLowerCase();
-                    }
-                } else if (type == 'array') {
-                    return val.join();
-                } else if (type == 'json') {
-                    return stringify(jsonQ.order(val));
-                }
 
-                return val;
-			},
-		sortAry:function (array, logic,settings) {
-                array.sort(function (a, b) {
-                    var compA = logic(a);
-                    var compB = logic(b);
-                    return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-                })
-
-                //to display on decending order
-                if (settings.order.toLowerCase() == "desc") {
-                    array.reverse();
+    //functions involved on sorting
+    var sortFunc = {
+        baseConv: function (type, val, settings) {
+            if (type == 'string') {
+                if (settings.caseIgnore) {
+                    return val.toLowerCase();
                 }
-				return array;
+            } else if (type == 'array') {
+                return val.join();
+            } else if (type == 'json') {
+                return stringify(jsonQ.order(val));
             }
-	};
+
+            return val;
+        },
+        sortAry: function (array, logic, settings) {
+            array.sort(function (a, b) {
+                var compA = logic(a);
+                var compB = logic(b);
+                return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+            })
+
+            //to display on decending order
+            if (settings.order.toLowerCase() == "desc") {
+                array.reverse();
+            }
+            return array;
+        }
+    };
 
     jsonQ.fn = jsonQ.prototype = {
         init: function (json) {
@@ -299,11 +297,11 @@
                 newJson: this,
                 refresh: true
             });
-			
-			//set jsonQ defination variables
-			this.length=this.jsonQ_current.length;
-			this.selector=[];
-						
+
+            //set jsonQ defination variables
+            this.length = this.jsonQ_current.length;
+            this.selector = [];
+
             return this;
 
         },
@@ -314,7 +312,7 @@
         },
         setPathValue: function (path, value) {
             jsonQ.setPathValue(this.jsonQ_root, path, value);
-			return this;
+            return this;
         },
         clone: function () {
             return parse(stringify(this.jsonQ_current));
@@ -327,16 +325,16 @@
                 newObj[k] = v;
             });
 
-			//to make a different copy of selector otherwise selector will be same on all object.
-			newObj.selector=jsonQ.merge([],newObj.selector);
+            //to make a different copy of selector otherwise selector will be same on all object.
+            newObj.selector = jsonQ.merge([], newObj.selector);
 
             return newObj;
         },
-        value: function (value,clone) {
+        value: function (value, clone) {
             var json = this.jsonQ_current,
                 root = this.jsonQ_root;
-			
-			clone=clone==false?false:true;
+
+            clone = clone == false ? false : true;
 
             //to return value if called as getter (ie value is undefined)
             if (!value) {
@@ -348,75 +346,74 @@
 
                 return newArray;
             }
-			//value as setter. value can be the exact value which you want to set or can be a callback. In callback pathvalue will be first argument.
-			else {
-				var type=objType(value);
+            //value as setter. value can be the exact value which you want to set or can be a callback. In callback pathvalue will be first argument.
+            else {
+                var type = objType(value);
                 for (var i = 0, ln = json.length; i < ln; i++) {
                     var path = json[i].path;
-                    if(type=='function'){
-						var prevVal=this.pathValue(path),
-							val=clone?jsonQ.clone(value(prevVal)):value(prevVal);
-						}
-					else{	
-						var val=clone?jsonQ.clone(value):value;
-					}
-					//to set value on json
-					this.setPathValue(path, val);
-				}
+                    if (type == 'function') {
+                        var prevVal = this.pathValue(path),
+                            val = clone ? jsonQ.clone(value(prevVal)) : value(prevVal);
+                    } else {
+                        var val = clone ? jsonQ.clone(value) : value;
+                    }
+                    //to set value on json
+                    this.setPathValue(path, val);
+                }
 
                 return this;
             }
 
         },
-		//clone parameter is for if you want to append any object so append exact object or create clone of object and append
+        //clone parameter is for if you want to append any object so append exact object or create clone of object and append
         //to append in last of values of current	
-        append: function (valObj,clone) {
-			return this.appendAt("last",valObj,clone);
+        append: function (valObj, clone) {
+            return this.appendAt("last", valObj, clone);
         },
-		//to append in first of values of current
-		prepend:function(valObj,clone){
-			return this.appendAt("first",valObj,clone);
-		},
-		//to append at specific index of values of current
-		appendAt:function(index,valObj,clone){
-				var current = this.jsonQ_current;
-				//return if incorrect index is given
-				if(isNaN(index)&& index!="first" && index!="last"){
-						error(index +'is not a valid index.');
-						return this;
-					}
-				
-				for (var i = 0, ln = current.length; i < ln; i++) {
-					var pathC = current[i].path.join('~~').split('~~'),
-						lastKey = pathC.pop(),
-						parRef = this.pathValue(pathC),
-						type = objType(parRef[lastKey]),
-						objLn=parRef[lastKey].length;
-						
-					
-					//to limit index
-					var idx=index<0||index=="first"?0:index>objLn||index=="last"?objLn:index;
-	
-	
-					//if array push
-					if (type == 'array') {
-						valObj=clone?jsonQ.clone(valObj):valObj;
+        //to append in first of values of current
+        prepend: function (valObj, clone) {
+            return this.appendAt("first", valObj, clone);
+        },
+        //to append at specific index of values of current
+        appendAt: function (index, valObj, clone) {
+            var current = this.jsonQ_current;
+            //return if incorrect index is given
+            if (isNaN(index) && index != "first" && index != "last") {
+                error(index + 'is not a valid index.');
+                return this;
+            }
 
-						parRef[lastKey].splice(idx,0,valObj);
-					}
-	
-					//if string concatinate , if number add
-					else if (type == 'string') {
-						var str=parRef[lastKey];
-						parRef[lastKey]=str.substring(0, idx) +valObj + str.substring(idx, objLn);
-					}
-	
-	
-				}
-				return this;
+            for (var i = 0, ln = current.length; i < ln; i++) {
+                var pathC = current[i].path.join('~~').split('~~'),
+                    lastKey = pathC.pop(),
+                    parRef = this.pathValue(pathC),
+                    type = objType(parRef[lastKey]),
+                    objLn = parRef[lastKey].length;
 
-			},
-         filter: function (qualifier) {
+
+                //to limit index
+                var idx = index < 0 || index == "first" ? 0 : index > objLn || index == "last" ? objLn : index;
+
+
+                //if array push
+                if (type == 'array') {
+                    valObj = clone ? jsonQ.clone(valObj) : valObj;
+
+                    parRef[lastKey].splice(idx, 0, valObj);
+                }
+
+                //if string concatinate , if number add
+                else if (type == 'string') {
+                    var str = parRef[lastKey];
+                    parRef[lastKey] = str.substring(0, idx) + valObj + str.substring(idx, objLn);
+                }
+
+
+            }
+            return this;
+
+        },
+        filter: function (qualifier) {
             var current = this.jsonQ_current,
                 newObj = this.cloneObj(jsonQ()),
                 newCurrent = newObj.jsonQ_current = [],
@@ -437,22 +434,22 @@
                 var regex = /(nth|eq)\((.+)\)/,
                     matched = regex.exec(qualifier);
                 if (matched) {
-                    newCurrent = jsonQ.nthElm(current, matched[2],true);
+                    newCurrent = jsonQ.nthElm(current, matched[2], true);
                 } else {
-                    newCurrent = jsonQ.nthElm(current,qualifier,true);
+                    newCurrent = jsonQ.nthElm(current, qualifier, true);
                 }
-				//to store it back on newObj
-				newObj.jsonQ_current=newCurrent;
+                //to store it back on newObj
+                newObj.jsonQ_current = newCurrent;
             }
 
-			//set other defination variables
-			newObj.length=newCurrent.length;
+            //set other defination variables
+            newObj.length = newCurrent.length;
 
-			//to add selector
-			newObj.selector.push({
-					method:'filter',
-					qualifier:qualifier
-				});
+            //to add selector
+            newObj.selector.push({
+                method: 'filter',
+                qualifier: qualifier
+            });
 
             return newObj;
 
@@ -460,43 +457,43 @@
         //first argument is key in which you want to search, second key is qualifier of it.	
         find: function (key, qualifier) {
             return tFunc.qualTrv.call(this, {
-						method: "find",
-						key: key,
-						qualifier: qualifier
-					});
+                method: "find",
+                key: key,
+                qualifier: qualifier
+            });
         },
         sibling: function (key, qualifier) {
             return tFunc.qualTrv.call(this, {
-						method: "sibling",
-						key: key,
-						qualifier: qualifier
-					});
+                method: "sibling",
+                key: key,
+                qualifier: qualifier
+            });
         },
         parent: function () {
             return tFunc.topLevel.call(this, {
-						method: "parent"
-					});
+                method: "parent"
+            });
         },
         closest: function (key) {
             return tFunc.topLevel.call(this, {
-						method: "closest",
-						key: key
-					});
+                method: "closest",
+                key: key
+            });
         },
-		//return path of first element found through selector
-		path:function(){
-			return this.jsonQ_current[0].path;
-			},
+        //return path of first element found through selector
+        path: function () {
+            return this.jsonQ_current[0].path;
+        },
         //some time we can only return the value of the first element in current
         firstElm: function () {
             return this.pathValue(this.jsonQ_current[0].path);
         },
-		lastElm:function(){
-            return this.pathValue(this.jsonQ_current[this.length-1].path);
-		},
-		nthElm:function(pattern,arrayReturn){
-			return jsonQ.nthElm(this.value(),pattern,arrayReturn);
-			},
+        lastElm: function () {
+            return this.pathValue(this.jsonQ_current[this.length - 1].path);
+        },
+        nthElm: function (pattern, arrayReturn) {
+            return jsonQ.nthElm(this.value(), pattern, arrayReturn);
+        },
         index: function (elm, isQualifier) {
             return jsonQ.index(this.value(), elm, isQualifier);
         },
@@ -508,27 +505,27 @@
         //function to sort array objects	
         sort: function (key, settings) {
             //merge global setting with local setting
-			settings = jsonQ.merge({}, jsonQ.settings.sort, settings);
+            settings = jsonQ.merge({}, jsonQ.settings.sort, settings);
             var jobj = this.find(key),
                 current = jobj.clone(),
                 sortStack = [],
                 sortedPath = [],
                 type = objType(jobj.pathValue(current[0].path)),
-				//function to get value which is an array from pathKey traversing from right.
-				getClosestArray = function (key) {
-					while (key.length != 0) {
-						var lastKey = key.pop();
-						if (!isNaN(lastKey)) {
-							var val = jobj.pathValue(key);
-							if (objType(val) == 'array') {
-								return val;
-							}
-						}
-					}
-					return null;
-				}
+                //function to get value which is an array from pathKey traversing from right.
+                getClosestArray = function (key) {
+                    while (key.length != 0) {
+                        var lastKey = key.pop();
+                        if (!isNaN(lastKey)) {
+                            var val = jobj.pathValue(key);
+                            if (objType(val) == 'array') {
+                                return val;
+                            }
+                        }
+                    }
+                    return null;
+                }
 
-            //initialize sort stack
+                //initialize sort stack
             for (var i = 0, ln = current.length; i < ln; i++) {
                 sortStack.push({
                     pathHolder: current[i].path.join('~~').split('~~'),
@@ -537,55 +534,54 @@
             }
 
             //to run the loop untill all ar sorted
-		   var alpha=0;
-		    while (sortStack.length != 0) {
-				alpha++;
-				for (var i = 0; i < sortStack.length; i++) {
+            var alpha = 0;
+            while (sortStack.length != 0) {
+                alpha++;
+                for (var i = 0; i < sortStack.length; i++) {
                     var cur = sortStack[i].current,
                         pH = sortStack[i].pathHolder,
-						//to get the closest array in the current path. This will also change value of current path variable.
+                        //to get the closest array in the current path. This will also change value of current path variable.
                         ary = getClosestArray(cur),
                         pathStr = cur.join(),
-						
-						// function to remove element if sorting is done for that path
-						spliceElm=function(){
-								sortStack.splice(i, 1);
-								i--;
-							}
-						
 
-                    //to remove from sort stack if no array is left on key or if that is already sorted
+                        // function to remove element if sorting is done for that path
+                        spliceElm = function () {
+                            sortStack.splice(i, 1);
+                            i--;
+                        }
+
+
+                        //to remove from sort stack if no array is left on key or if that is already sorted
                     if (cur.length == 0 || sortedPath.indexOf(pathStr) != -1) {
-                    	spliceElm();
-					}
+                        spliceElm();
+                    }
 
                     //to sort if array found
                     else {
                         //logic path is path which we add in on condition to find the element value according to which we are sorting
-                        var logicPath = pH.slice(cur.length+1, pH.length),
+                        var logicPath = pH.slice(cur.length + 1, pH.length),
 
                             logic = function (a) {
                                 var val = jsonQ.pathValue(a, logicPath);
 
                                 //to convert val to be compared
-                                val = sortFunc.baseConv(type,val,settings);
+                                val = sortFunc.baseConv(type, val, settings);
                                 return settings.logic(val);
                             }
 
-                        //to sort the root json
-                        sortFunc.sortAry(ary, logic,settings);
+                            //to sort the root json
+                        sortFunc.sortAry(ary, logic, settings);
 
                         //if multilevel sort is true
-						if(settings.allLevel){
-							//to maintain the path which is already sorted and change pathHolder to point first element of sorted array
-							pH[cur.length] = 0;
-							sortedPath.push(pathStr);
-						}
-						else{
-							//remove sorted path
-							spliceElm();
-							}
-					}
+                        if (settings.allLevel) {
+                            //to maintain the path which is already sorted and change pathHolder to point first element of sorted array
+                            pH[cur.length] = 0;
+                            sortedPath.push(pathStr);
+                        } else {
+                            //remove sorted path
+                            spliceElm();
+                        }
+                    }
 
 
 
@@ -607,28 +603,28 @@
         unique: function () {
             return jsonQ.unique(this.value());
         },
-		refresh:function(){
-				var selector=this.selector;
-			
-				var jObj=jsonQ(this.jsonQ_root);
-				for(var i=0,ln=selector.length; i<ln; i++){
-					var curSel=selector[i],
-						args=[];
-					
-					if(curSel.key) args.push(curSel.key);
-					if(curSel.qualifier) args.push(curSel.qualifier);
-					
-					jObj=jObj[curSel.method].apply(jObj,args);	
-					}
+        refresh: function () {
+            var selector = this.selector;
 
-				//to store value back on this
-				this.cloneObj.call(jObj,this);
-				
-				return this;		
-			},
-		prettify:function(htmlReturn){
-			return jsonQ.prettify(this.value(),htmlReturn);
-			}	
+            var jObj = jsonQ(this.jsonQ_root);
+            for (var i = 0, ln = selector.length; i < ln; i++) {
+                var curSel = selector[i],
+                    args = [];
+
+                if (curSel.key) args.push(curSel.key);
+                if (curSel.qualifier) args.push(curSel.qualifier);
+
+                jObj = jObj[curSel.method].apply(jObj, args);
+            }
+
+            //to store value back on this
+            this.cloneObj.call(jObj, this);
+
+            return this;
+        },
+        prettify: function (htmlReturn) {
+            return jsonQ.prettify(this.value(), htmlReturn);
+        }
     }
 
     //super exposed functions
@@ -682,13 +678,13 @@
 
             jsonQ.each(arg[i], function (k, v) {
                 var type = objType(v),
-					tarType=objType(target[k]);
+                    tarType = objType(target[k]);
 
-                if (deep && (type=="array" || type=="json")) {
-                    target[k]= type==tarType && (tarType=="array" || tarType=="json")?target[k]:type == "array" ? [] : {};
-					
-					//to merge recursively
-					jsonQ.merge(deep, target[k], v);
+                if (deep && (type == "array" || type == "json")) {
+                    target[k] = type == tarType && (tarType == "array" || tarType == "json") ? target[k] : type == "array" ? [] : {};
+
+                    //to merge recursively
+                    jsonQ.merge(deep, target[k], v);
                 } else {
                     target[k] = v;
                 }
@@ -708,31 +704,31 @@
 
             var convLogic = function (val) {
 
-                    var type = objType(val);
-                    val=sortFunc.baseConv(type,val,settings);					
+                var type = objType(val);
+                val = sortFunc.baseConv(type, val, settings);
 
                 return settings.logic(val);
             };
 
             //to return sorted array
-           return sortFunc.sortAry(ary, convLogic,settings);
+            return sortFunc.sortAry(ary, convLogic, settings);
         },
         order: function (json) {
-            
-			//to return if json type is not an object type
-			if(typeof json != 'object'){
-				return json;
-				}
-			
+
+            //to return if json type is not an object type
+            if (typeof json != 'object') {
+                return json;
+            }
+
             var logic = function (val) {
                 //if a json is an array alike and keys are numbers as string type ("1","2" instad of 1,2) convert them to integer.
-				if (!isNaN(val)) val = parseInt(val);
+                if (!isNaN(val)) val = parseInt(val);
                 return val;
             },
 
                 func = function (jsonVal) {
                     var jsonType = objType(jsonVal),
-                   		keys = Object.keys(jsonVal);
+                        keys = Object.keys(jsonVal);
 
                     if (jsonType == 'json') {
                         keys.sort(function (a, b) {
@@ -766,25 +762,25 @@
             return json;
         },
         clone: function (json) {
-            var type=objType(json);
-			return type=='json'||type=='array'?parse(stringify(json)):json;
+            var type = objType(json);
+            return type == 'json' || type == 'array' ? parse(stringify(json)) : json;
         },
         //to find index of an element in set of element	
         index: function (list, elm, isQualifier) {
             var type = objType(elm),
                 ln = list.length,
                 //check that elm is a object or not that is taken by refrence 
-				refObj = type == "json" || type == "array" || type == "function" ? true : false;
-            
-			
-			//if elm is a function consider it as a qualifier
-			if(type=="function"){
-					isQualifier=true;
-				}
-			
-			if (refObj && !isQualifier) {
+                refObj = type == "json" || type == "array" || type == "function" ? true : false;
+
+
+            //if elm is a function consider it as a qualifier
+            if (type == "function") {
+                isQualifier = true;
+            }
+
+            if (refObj && !isQualifier) {
                 //convert object to string so that they can be compared.
-				var jsonStr = stringify(jsonQ.order(elm));
+                var jsonStr = stringify(jsonQ.order(elm));
             }
 
             for (var i = 0; i < ln; i++) {
@@ -798,27 +794,26 @@
                         if (stringify(jsonQ.order(cur)) == jsonStr) {
                             return i;
                         }
-					
-					//if element is a qualifier	
+
+                        //if element is a qualifier	
                     } else {
                         var test;
                         if (type == 'function') {
                             test = elm.call(cur);
-                        } else if (type == "json" && lType=="json") {
+                        } else if (type == "json" && lType == "json") {
                             test = jsonQ.checkKeyValue(cur, elm);
-                        } else if (lType=="array"){
-								if(type=="array"){
-										for (var j = 0, elmLn = elm.length; j < elmLn; j++) {
-											test = jsonQ.index(cur, elm[j])!=-1;
-											if (!test) break;
-										}
-									}
-								else{
-									test = jsonQ.index(cur, elm)!=-1;
-									}	
-							}
-						
-						//return index if it passes the test
+                        } else if (lType == "array") {
+                            if (type == "array") {
+                                for (var j = 0, elmLn = elm.length; j < elmLn; j++) {
+                                    test = jsonQ.index(cur, elm[j]) != -1;
+                                    if (!test) break;
+                                }
+                            } else {
+                                test = jsonQ.index(cur, elm) != -1;
+                            }
+                        }
+
+                        //return index if it passes the test
                         if (test) return i;
 
                     }
@@ -829,16 +824,16 @@
             }
             return -1;
         },
-		//to check an array contains a specfic element or not . an element can be aaray or json.
+        //to check an array contains a specfic element or not . an element can be aaray or json.
         contains: function (array, elm, isQualifier) {
             return jsonQ.index(array, elm, isQualifier) != -1;
         },
         //function to check an json object contains a set of key value pair or not
         checkKeyValue: function (json, keyVal) {
-            for(var k in keyVal){
-                if(keyVal.hasOwnProperty(k))
-					if (!jsonQ.identical(keyVal[k], json[k])) return false;
-				}
+            for (var k in keyVal) {
+                if (keyVal.hasOwnProperty(k))
+                    if (!jsonQ.identical(keyVal[k], json[k])) return false;
+            }
             return true;
         },
 
@@ -854,9 +849,9 @@
                 var rand = Math.floor(Math.random() * array.length);
                 result = array[rand];
             } else if (arg == 'even') {
-                result = jsonQ.nthElm(array,'2n');
+                result = jsonQ.nthElm(array, '2n');
             } else if (arg == 'odd') {
-                result = jsonQ.nthElm(array,'2n+1');
+                result = jsonQ.nthElm(array, '2n+1');
             }
             //to return sequence
             else {
@@ -884,12 +879,12 @@
             return objType(result) != 'array' && aryRetrn ? [result] : result;
         },
         prettify: function (obj, htmlReturn) {
-            
-			if(typeof obj!= 'object' ){
-				throw('Only valid json object is allowed.');
-				return;
-				}
-			
+
+            if (typeof obj != 'object') {
+                throw ('Only valid json object is allowed.');
+                return;
+            }
+
             //to return prtified. If htmlReturn false add 3 spaces else add &nbsp;
             if (htmlReturn) {
                 return JSON.stringify(obj, null, '\t').replace(/\n/g, '</br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
@@ -1012,8 +1007,8 @@
                 return null;
             }
             while (i < ln) {
-                if (typeof tempJson[path[i]]!='object') {
-                    tempJson[path[i]] = objType(path[i+1])=='number'?[]:{};
+                if (typeof tempJson[path[i]] != 'object') {
+                    tempJson[path[i]] = objType(path[i + 1]) == 'number' ? [] : {};
                 }
                 if (i == path.length - 1) {
                     tempJson[path[i]] = value;
@@ -1033,7 +1028,7 @@
                 };
 
                 //to make loop on array or object;
-                jsonQ.each(json,function (k, val) {
+                jsonQ.each(json, function (k, val) {
                     var tag = type == 'array' ? 'arrayItem' : k,
                         elmType = objType(val);
                     xmlAry.push('<' + tag + ' type="' + elmType + '">');
@@ -1056,46 +1051,46 @@
             }
             return jsonToXML(json);
         },
-		 //append functions
-		 
-		 //to append in last of values of array or string	
-        append: function (target,val,clone) {
-			return jsonQ.appendAt(target,"last",val,clone);
-        },
-		//to append in first of values of array or string
-		prepend:function(target,val,clone){
-			return jsonQ.appendAt(target,"first",val,clone);
-		},
-		//to append at specific index of values of array or string
-		appendAt:function(target,index,val,clone){
-				
-				if(isNaN(index)&& index!="first" && index!="last"){
-						error(index +'is not a valid index.');
-						return;
-					}
-				
-				var type=objType(target),
-					length=target.length;
-					
-				//to limit index
-					var idx=index<0||index=="first"?0:index>length||index=="last"?length:index;
-	
-	
-					//if array push
-					if (type == 'array') {
-						val=clone?jsonQ.clone(val):val;
-						target.splice(idx,0,val);
-					}
-	
-					//if string concatinate , if number add
-					else if (type == 'string') {
-						target=target.substring(0, idx) +val + target.substring(idx, length);
-					}
-	
-	
-				return target;
+        //append functions
 
-			}
+        //to append in last of values of array or string	
+        append: function (target, val, clone) {
+            return jsonQ.appendAt(target, "last", val, clone);
+        },
+        //to append in first of values of array or string
+        prepend: function (target, val, clone) {
+            return jsonQ.appendAt(target, "first", val, clone);
+        },
+        //to append at specific index of values of array or string
+        appendAt: function (target, index, val, clone) {
+
+            if (isNaN(index) && index != "first" && index != "last") {
+                error(index + 'is not a valid index.');
+                return;
+            }
+
+            var type = objType(target),
+                length = target.length;
+
+            //to limit index
+            var idx = index < 0 || index == "first" ? 0 : index > length || index == "last" ? length : index;
+
+
+            //if array push
+            if (type == 'array') {
+                val = clone ? jsonQ.clone(val) : val;
+                target.splice(idx, 0, val);
+            }
+
+            //if string concatinate , if number add
+            else if (type == 'string') {
+                target = target.substring(0, idx) + val + target.substring(idx, length);
+            }
+
+
+            return target;
+
+        }
 
     });
 
