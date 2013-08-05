@@ -62,7 +62,7 @@
             lvlpath.push(k);
 
             //to add a new direct access for each key in json so we get the path of that key easily 
-            if (objType(json) == 'json') {
+            if (objType(json) == 'object') {
                 if (keyAdded.indexOf(k) == -1) {
                     keyAdded.push(k)
                     newJson[k] = [];
@@ -74,7 +74,7 @@
             }
             //if value is json or array go to further level
             var type = objType(val);
-            if (type == 'json' || type == 'array') {
+            if (type == 'object' || type == 'array') {
                 newFormat({
                     'json': val,
                     'newJson': newJson,
@@ -228,7 +228,7 @@
             return newObj;
         },
         qTest: function (qType, qualifier, path, array) {
-            var qTest = qType == 'function' ? qualifier.call(this.pathValue(path)) : qType == 'json' ? jsonQ.checkKeyValue(this.pathValue(path), qualifier) : true;
+            var qTest = qType == 'function' ? qualifier.call(this.pathValue(path)) : qType == 'object' ? jsonQ.checkKeyValue(this.pathValue(path), qualifier) : true;
 
             //if it is key value pair than also we can check here.
             if (qTest) {
@@ -250,7 +250,7 @@
                 }
             } else if (type == 'array') {
                 return val.join();
-            } else if (type == 'json') {
+            } else if (type == 'object') {
                 return stringify(jsonQ.order(val));
             }
 
@@ -280,7 +280,7 @@
             if (!json) return this;
 
             type = objType(json);
-            if (type != 'json' && type != 'array') {
+            if (type != 'object' && type != 'array') {
                 error('Not a valid json');
                 return json;
             }
@@ -641,7 +641,7 @@
     var objType = jsonQ.objType = function (obj) {
         var map = {
             '[object Array]': 'array',
-            '[object Object]': 'json',
+            '[object Object]': 'object',
             '[object String]': 'string',
             '[object Number]': 'number',
             '[object Boolean]': 'boolean',
@@ -680,8 +680,8 @@
                 var type = objType(v),
                     tarType = objType(target[k]);
 
-                if (deep && (type == "array" || type == "json")) {
-                    target[k] = type == tarType && (tarType == "array" || tarType == "json") ? target[k] : type == "array" ? [] : {};
+                if (deep && (type == "array" || type == "object")) {
+                    target[k] = type == tarType && (tarType == "array" || tarType == "object") ? target[k] : type == "array" ? [] : {};
 
                     //to merge recursively
                     jsonQ.merge(deep, target[k], v);
@@ -730,7 +730,7 @@
                     var jsonType = objType(jsonVal),
                         keys = Object.keys(jsonVal);
 
-                    if (jsonType == 'json') {
+                    if (jsonType == 'object') {
                         keys.sort(function (a, b) {
                             var compA = logic(a);
                             var compB = logic(b);
@@ -744,12 +744,12 @@
                             type = objType(val);
 
                         //to go to next level if value is json type
-                        if (type == 'json' || type == "array") {
+                        if (type == 'object' || type == "array") {
                             func(val);
                         }
 
                         //to order
-                        if (type = 'json') {
+                        if (type = 'object') {
                             delete jsonVal[key];
                             jsonVal[key] = val;
                         }
@@ -763,14 +763,14 @@
         },
         clone: function (json) {
             var type = objType(json);
-            return type == 'json' || type == 'array' ? parse(stringify(json)) : json;
+            return type == 'object' || type == 'array' ? parse(stringify(json)) : json;
         },
         //to find index of an element in set of element	
         index: function (list, elm, isQualifier) {
             var type = objType(elm),
                 ln = list.length,
                 //check that elm is a object or not that is taken by refrence 
-                refObj = type == "json" || type == "array" || type == "function" ? true : false;
+                refObj = type == "object" || type == "array" || type == "function" ? true : false;
 
 
             //if elm is a function consider it as a qualifier
@@ -800,7 +800,7 @@
                         var test;
                         if (type == 'function') {
                             test = elm.call(cur);
-                        } else if (type == "json" && lType == "json") {
+                        } else if (type == "object" && lType == "object") {
                             test = jsonQ.checkKeyValue(cur, elm);
                         } else if (lType == "array") {
                             if (type == "array") {
@@ -1032,7 +1032,7 @@
                     var tag = type == 'array' ? 'arrayItem' : k,
                         elmType = objType(val);
                     xmlAry.push('<' + tag + ' type="' + elmType + '">');
-                    if (elmType == 'json' || elmType == 'array') {
+                    if (elmType == 'object' || elmType == 'array') {
                         jsonToXML(val, xmlAry);
                     } else {
                         xmlAry.push('<![CDATA[' + val + ']]>');
