@@ -13,7 +13,7 @@ npm install jsonQ
 </pre>
 and include on file using
 <pre>
-var jsonQ=require("jsonQ");
+var jsonQ=require("jsonq");
 </pre>
 
 <br/>
