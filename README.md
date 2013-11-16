@@ -10,8 +10,9 @@ It also provide some utilty methods , we need while working with JSON which dire
   	For node 
     <pre>
 npm install jsonQ
-
-//and include on file using
+</pre>
+and include on file using
+<pre>
 var jsonQ=require("jsonQ");
 </pre>
     <br/>
