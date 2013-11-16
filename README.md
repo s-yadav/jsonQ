@@ -5,4 +5,18 @@ jsonQ is a light weight and feature-rich javascript library to make your world a
 For a JSON, it makes traversing (you don’t need to make loop inside loop), extracting data, manipulating it very simple.<br/>
 It also provide some utilty methods , we need while working with JSON which directly works with a JSON . 
 
+  <p><strong>Installation</strong></p>
+  <p>
+  	For node 
+    <pre>
+npm install jsonQ
+
+//and include on file using
+var jsonQ=require("jsonQ");
+</pre>
+    <br/>
+    For browser just include jsonQ.min.js file or jsonQ.js in your directory.
+  </p>
+
+
 <strong>See documentation on http://s-yadav.github.com/jsonQ.html</strong>
