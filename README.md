@@ -15,7 +15,8 @@ and include on file using
 <pre>
 var jsonQ=require("jsonQ");
 </pre>
-    <br/>
+
+<br/>
     For browser just include jsonQ.min.js file or jsonQ.js in your directory.
   </p>
 
