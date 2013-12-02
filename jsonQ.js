@@ -5,7 +5,6 @@
  *Copyright (c) 2013 Sudhanshu Yadav.
  *Dual licensed under the MIT and GPL licenses
  */
-
 //initialize jsonQ
 ;(function (window, document, undefined) {
     var jsonQ = function (json) {
@@ -749,10 +748,8 @@
                         }
 
                         //to order
-                        if (type = 'object') {
-                            delete jsonVal[key];
-                            jsonVal[key] = val;
-                        }
+                        delete jsonVal[key];
+                        jsonVal[key] = val;
                     }
                 }
 
@@ -1101,4 +1098,4 @@
     jsonQ.fn.init.prototype = jsonQ.fn;
 
 
-})(window, document)
+})(window, document);
