@@ -1,5 +1,5 @@
 /*
- *jsonQ.js v 1.0.0
+ *jsonQ.js v 1.0.1
  *Author: Sudhanshu Yadav
  *s-yadav.github.com
  *Copyright (c) 2013 Sudhanshu Yadav.
@@ -29,7 +29,7 @@
             "caseIgnore": true,
             "allLevel": true //to sort all level if true and if false only lowest level	
         }
-    }
+    };
 
 
 
@@ -61,7 +61,7 @@
             //to add a new direct access for each key in json so we get the path of that key easily 
             if (objType(json) == 'object') {
                 if (keyAdded.indexOf(k) == -1) {
-                    keyAdded.push(k)
+                    keyAdded.push(k);
                     newJson[k] = [];
                 }
 
@@ -101,11 +101,11 @@
                 var pathC = current[i].path,
                     pathStr,
                     outofBound = false,
-                    parPath = pathC.length != 0 ? pathC.join('~~').split('~~') : [];
+                    parPath = pathC.concat([]);
 
                 //to run callback to apply top traverse logic
                 if (method == 'parent') {
-                    if (parPath.length == 0) {
+                    if (parPath.length === 0) {
                         outofBound = true;
                     } else {
                         parPath.pop();
@@ -119,7 +119,7 @@
                     }
                 }
 
-                var pathStr = JSON.stringify(parPath);
+                pathStr = JSON.stringify(parPath);
 
                 if (prevPathStr != pathStr && !outofBound) {
                     newCurrent.push({
@@ -164,11 +164,11 @@
 
                 if (!find) {
                     //if it is top level continue the loop. This case comes when we do sibling method called on initial object
-                    if (pathC.length == 0) {
+                    if (pathC.length === 0) {
                         continue;
                     }
 
-                    var pathCTemp = pathC.join('~~').split('~~');
+                    var pathCTemp = pathC.concat([]);
                     pathCTemp.pop();
                 }
 
@@ -179,7 +179,7 @@
                     if (find) {
                         condition = matchPath(pathC, pathE);
                     } else {
-                        var pathETemp = pathE.join('~~').split('~~');
+                        var pathETemp = pathE.concat([]);
                         //to pop last element
                         pathETemp.pop();
                         condition = pathCTemp.join() == pathETemp.join();
@@ -258,7 +258,7 @@
                 var compA = logic(a);
                 var compB = logic(b);
                 return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
-            })
+            });
 
             //to display on decending order
             if (settings.order.toLowerCase() == "desc") {
@@ -315,8 +315,9 @@
             return parse(stringify(this.jsonQ_current));
         },
         cloneObj: function (newObj) {
-            var obj = this,
-                newObj = newObj || {};
+            var obj = this;
+
+            newObj = newObj || {};
 
             jsonQ.each(obj, function (k, v) {
                 newObj[k] = v;
@@ -328,10 +329,10 @@
             return newObj;
         },
         value: function (value, clone) {
-            var json = this.jsonQ_current,
-                root = this.jsonQ_root;
+            var json = this.jsonQ_current;
 
-            clone = clone == false ? false : true;
+
+            clone = clone === false ? false : true;
 
             //to return value if called as getter (ie value is undefined)
             if (!value) {
@@ -347,12 +348,13 @@
             else {
                 var type = objType(value);
                 for (var i = 0, ln = json.length; i < ln; i++) {
-                    var path = json[i].path;
+                    var path = json[i].path,
+                        val;
                     if (type == 'function') {
-                        var prevVal = this.pathValue(path),
-                            val = clone ? jsonQ.clone(value(prevVal)) : value(prevVal);
+                        var prevVal = this.pathValue(path);
+                        val = clone ? jsonQ.clone(value(prevVal)) : value(prevVal);
                     } else {
-                        var val = clone ? jsonQ.clone(value) : value;
+                        val = clone ? jsonQ.clone(value) : value;
                     }
                     //to set value on json
                     this.setPathValue(path, val);
@@ -381,7 +383,7 @@
             }
 
             for (var i = 0, ln = current.length; i < ln; i++) {
-                var pathC = current[i].path.join('~~').split('~~'),
+                var pathC = current[i].path.concat([]),
                     lastKey = pathC.pop(),
                     parRef = this.pathValue(pathC),
                     type = objType(parRef[lastKey]),
@@ -419,8 +421,8 @@
             if (!qualifier) return;
 
             for (var i = 0, ln = current.length; i < ln; i++) {
-                var pathC = current[i].path,
-                    found = false;
+                var pathC = current[i].path;
+
                 //code to check qualifier need to be written this on is only when quantifier when it is function or json in other case it will be applied on last
                 tFunc.qTest.call(this, qType, qualifier, pathC, newCurrent);
             }
@@ -494,7 +496,7 @@
         index: function (elm, isQualifier) {
             return jsonQ.index(this.value(), elm, isQualifier);
         },
-        createXML: function (json) {
+        createXML: function () {
             return jsonQ.createXML(this.value());
         },
 
@@ -506,11 +508,12 @@
             var jobj = this.find(key),
                 current = jobj.clone(),
                 sortStack = [],
+                i, ln,
                 sortedPath = [],
                 type = objType(jobj.pathValue(current[0].path)),
                 //function to get value which is an array from pathKey traversing from right.
                 getClosestArray = function (key) {
-                    while (key.length != 0) {
+                    while (key.length !== 0) {
                         var lastKey = key.pop();
                         if (!isNaN(lastKey)) {
                             var val = jobj.pathValue(key);
@@ -520,37 +523,38 @@
                         }
                     }
                     return null;
-                }
+                };
 
-                //initialize sort stack
-            for (var i = 0, ln = current.length; i < ln; i++) {
+            //initialize sort stack
+            for (i = 0, ln = current.length; i < ln; i++) {
                 sortStack.push({
-                    pathHolder: current[i].path.join('~~').split('~~'),
-                    current: current[i].path.join('~~').split('~~')
+                    pathHolder: current[i].path.concat([]),
+                    current: current[i].path.concat([])
                 });
             }
 
             //to run the loop untill all ar sorted
-            var alpha = 0;
-            while (sortStack.length != 0) {
+            var alpha = 0,
+
+                // function to remove element if sorting is done for that path
+                spliceElm = function (i) {
+                    sortStack.splice(i, 1);
+                    return --i;
+                };
+            while (sortStack.length !== 0) {
                 alpha++;
-                for (var i = 0; i < sortStack.length; i++) {
+                for (i = 0; i < sortStack.length; i++) {
                     var cur = sortStack[i].current,
                         pH = sortStack[i].pathHolder,
                         //to get the closest array in the current path. This will also change value of current path variable.
                         ary = getClosestArray(cur),
-                        pathStr = cur.join(),
-
-                        // function to remove element if sorting is done for that path
-                        spliceElm = function () {
-                            sortStack.splice(i, 1);
-                            i--;
-                        }
+                        pathStr = cur.join();
 
 
-                        //to remove from sort stack if no array is left on key or if that is already sorted
-                    if (cur.length == 0 || sortedPath.indexOf(pathStr) != -1) {
-                        spliceElm();
+
+                    //to remove from sort stack if no array is left on key or if that is already sorted
+                    if (cur.length === 0 || sortedPath.indexOf(pathStr) != -1) {
+                        i = spliceElm(i);
                     }
 
                     //to sort if array found
@@ -564,9 +568,9 @@
                                 //to convert val to be compared
                                 val = sortFunc.baseConv(type, val, settings);
                                 return settings.logic(val);
-                            }
+                            };
 
-                            //to sort the root json
+                        //to sort the root json
                         sortFunc.sortAry(ary, logic, settings);
 
                         //if multilevel sort is true
@@ -576,7 +580,7 @@
                             sortedPath.push(pathStr);
                         } else {
                             //remove sorted path
-                            spliceElm();
+                            i = spliceElm(i);
                         }
                     }
 
@@ -622,7 +626,7 @@
         prettify: function (htmlReturn) {
             return jsonQ.prettify(this.value(), htmlReturn);
         }
-    }
+    };
 
     //super exposed functions
     //jsonQ each
@@ -649,7 +653,7 @@
         return function (obj) {
             var type = Object.prototype.toString.call(obj);
             return map[type];
-        }
+        };
     }());
 
     //to merge all the objects in argument to the first argument.
@@ -663,7 +667,7 @@
             ln = arg.length,
             deep = false,
             target = arg[0];
-        if (ln == 0 || (deepType == "boolean" && ln == 1)) {
+        if (ln === 0 || (deepType == "boolean" && ln == 1)) {
             return;
         }
         //to get the target object where all merge will be done
@@ -673,21 +677,24 @@
             deep = arg[0];
         }
 
+        //callback function to recursiveliy merge
+        var eachCallback = function (k, v) {
+            var type = objType(v),
+                tarType = objType(target[k]);
+
+            if (deep && (type == "array" || type == "object")) {
+                target[k] = type == tarType && (tarType == "array" || tarType == "object") ? target[k] : type == "array" ? [] : {};
+
+                //to merge recursively
+                jsonQ.merge(deep, target[k], v);
+            } else {
+                target[k] = v;
+            }
+        };
+
         for (; i < ln; i++) {
 
-            jsonQ.each(arg[i], function (k, v) {
-                var type = objType(v),
-                    tarType = objType(target[k]);
-
-                if (deep && (type == "array" || type == "object")) {
-                    target[k] = type == tarType && (tarType == "array" || tarType == "object") ? target[k] : type == "array" ? [] : {};
-
-                    //to merge recursively
-                    jsonQ.merge(deep, target[k], v);
-                } else {
-                    target[k] = v;
-                }
-            });
+            jsonQ.each(arg[i], eachCallback);
         }
         return target;
     };
@@ -748,14 +755,14 @@
                         }
 
                         //to order
-                        if (type = 'object') {
+                        if (jsonType == 'object') {
                             delete jsonVal[key];
                             jsonVal[key] = val;
                         }
                     }
-                }
+                };
 
-                //initialize
+            //initialize
             func(json);
 
             return json;
@@ -858,9 +865,14 @@
                     var newArray = [],
                         ln = array.length;
 
-                    arg = arg.replace(/([0-9])n/g, function ($0, $1) {
+                    if(!arg.match(/^[0-9n*+-\/]+$/)) throw('');
+					
+					arg = arg.replace(/([0-9])n/g, function ($0, $1) {
                         return $1 ? $1 + '*n' : $0;
                     });
+					
+					
+					
                     for (var n = 0; n < ln; n++) {
                         var index = eval(arg);
                         if (index > ln - 1) {
@@ -881,7 +893,6 @@
 
             if (typeof obj != 'object') {
                 throw ('Only valid json object is allowed.');
-                return;
             }
 
             //to return prtified. If htmlReturn false add 3 spaces else add &nbsp;
@@ -933,6 +944,7 @@
         intersection: function () {
             var arg = arguments,
                 target = [],
+                flag,
                 ln = arg.length;
 
             if (ln == 1) {
@@ -980,15 +992,15 @@
         },
         //to get value at specific path in a json
         pathValue: function (json, path) {
-            var i = 0;
-            json = json,
-            ln = path.length;
+            var i = 0,
 
-            if (json == null) {
+                ln = path.length;
+
+            if (json === null) {
                 return null;
             }
             while (i < ln) {
-                if (json[path[i]] == null) {
+                if (json[path[i]] === null) {
                     json = null;
                     return;
                 } else {
@@ -1002,7 +1014,7 @@
             var i = 0,
                 tempJson = json,
                 ln = path.length;
-            if (json == null) {
+            if (json === null) {
                 return null;
             }
             while (i < ln) {
@@ -1020,11 +1032,11 @@
         createXML: function (json) {
             var jsonToXML = function (json, xmlAry) {
                 xmlAry = xmlAry || [];
-                var start = xmlAry.length == 0 ? true : false,
+                var start = xmlAry.length === 0 ? true : false,
                     type = objType(json);
                 if (start) {
                     xmlAry.push('<?xml version="1.0" encoding="ISO-8859-1"?><jsonXML>');
-                };
+                }
 
                 //to make loop on array or object;
                 jsonQ.each(json, function (k, val) {
@@ -1035,6 +1047,7 @@
                         jsonToXML(val, xmlAry);
                     } else {
                         xmlAry.push('<![CDATA[' + val + ']]>');
+
                     }
                     xmlAry.push('</' + tag + '>');
                 });
@@ -1047,7 +1060,7 @@
                     return xmlAry;
                 }
 
-            }
+            };
             return jsonToXML(json);
         },
         //append functions
@@ -1092,9 +1105,6 @@
         }
 
     });
-
-    //to assign most used function to direct variables to reduce code size
-    var objType = jsonQ.objType;
 
     //to assign jsonQ prototypes to init function
     jsonQ.fn.init.prototype = jsonQ.fn;
