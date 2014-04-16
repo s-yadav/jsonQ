@@ -1,0 +1,42 @@
+{
+    "name": "jsonq",
+    "description": "A JavaScript library to make manipulation and extraction of data from a JSON very easy and fast.",
+    "main": "jsonQ.js",
+    "author": {
+        "name": "Sudhanshu Yadav",
+        "email": "sudhanshuyadav2@gmail.com"
+    },
+    "version": "1.0.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/s-yadav/jsonQ"
+    },
+    "ignore": [
+        "node_modules"
+    ],
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/s-yadav/jsonQ/blob/master/MIT-LICENSE.txt"
+        },
+        {
+            "type": "GPLv2",
+            "url": "http://opensource.org/licenses/GPL-2.0"
+        }
+    ],
+    "bugs": {
+        "url": "https://github.com/s-yadav/jsonQ/issues"
+    },
+    "keywords": [
+        "json",
+        "library",
+        "query",
+        "manipulate",
+        "traverse",
+        "data",
+        "extract"
+    ],
+    "readmeFilename": "README.md",
+    "docs": "http://ignitersworld.com/lab/jsonQ.html",
+    "homepage": "http://ignitersworld.com/lab/jsonQ.html"
+}
