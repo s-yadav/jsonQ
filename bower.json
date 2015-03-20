@@ -1,15 +1,15 @@
 {
-    "name": "jsonq",
-    "description": "A JavaScript library to make manipulation and extraction of data from a JSON very easy and fast.",
-    "main": "jsonQ.js",
+    "name": "ut-angular-jsonq",
+    "description": "An AngularJS implementation of the jsonQ library.",
+    "main": "ut-angular-jsonQ.js",
     "author": {
-        "name": "Sudhanshu Yadav",
-        "email": "sudhanshuyadav2@gmail.com"
+        "name": "Vincent Le Badezert",
+        "email": "v.lebadezet@untemps.net"
     },
-    "version": "1.0.1",
+    "version": "1.0.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/s-yadav/jsonQ"
+        "url": "https://github.com/untemps/ut-angular-jsonQ"
     },
     "ignore": [
         "node_modules"
@@ -17,7 +17,7 @@
     "licenses": [
         {
             "type": "MIT",
-            "url": "https://github.com/s-yadav/jsonQ/blob/master/MIT-LICENSE.txt"
+            "url": "https://github.com/untemps/ut-angular-jsonQ/blob/master/MIT-LICENSE.txt"
         },
         {
             "type": "GPLv2",
@@ -25,9 +25,11 @@
         }
     ],
     "bugs": {
-        "url": "https://github.com/s-yadav/jsonQ/issues"
+        "url": "https://github.com/untemps/ut-angular-jsonQ/issues"
     },
     "keywords": [
+        "angular", "angularJS",
+        "jsonQ",
         "json",
         "library",
         "query",

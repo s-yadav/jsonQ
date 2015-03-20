@@ -4,11 +4,20 @@
  *s-yadav.github.com
  *Copyright (c) 2013 Sudhanshu Yadav.
  *Dual licensed under the MIT and GPL licenses
+ *
+ *Modified by untemps (github.com/untemps/ut-angular-jsonQ)
  */
-//initialize jsonQ
-;(function (undefined) {
 
-    var jsonQ = function (json) {
+var jsonQ;
+
+function JsonQ() {
+    return jsonQ;
+};
+
+//initialize jsonQ
+(function (undefined) {
+
+    jsonQ = function (json) {
         //return a jsonQ object
         return new jsonQ.fn.init(json);
     },
@@ -34,7 +43,7 @@
 
 
     //to make jsonQ accessible outside	
-    window.jsonQ = jsonQ;
+    //window.jsonQ = jsonQ;
 
 
     /*****private functions for internal use only*******/
