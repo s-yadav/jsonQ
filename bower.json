@@ -6,7 +6,7 @@
         "name": "Vincent Le Badezert",
         "email": "v.lebadezet@untemps.net"
     },
-    "version": "1.0.0",
+    "version": "1.0.2",
     "repository": {
         "type": "git",
         "url": "https://github.com/untemps/ut-angular-jsonQ"
