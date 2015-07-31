@@ -21,4 +21,4 @@ var jsonQ=require("jsonq");
   </p>
 
 
-<strong>See documentation on http://s-yadav.github.com/jsonQ.html</strong>
+<strong>See documentation on http://ignitersworld.com/lab/jsonQ.html</strong>
