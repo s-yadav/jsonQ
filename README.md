@@ -9,7 +9,7 @@ It also provide some utilty methods , we need while working with JSON which dire
   <p>
   	For node 
     <pre>
-npm install jsonQ
+npm install jsonq
 </pre>
 and include on file using
 <pre>
