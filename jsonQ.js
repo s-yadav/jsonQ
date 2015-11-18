@@ -1110,5 +1110,6 @@
     jsonQ.fn.init.prototype = jsonQ.fn;
 
     //to make jsonQ accessible outside	
-    window.jsonQ = jsonQ;
+    var global = Function('return this')() || (42, eval)('this');
+    global.jsonQ = jsonQ;
 }());
