@@ -6,19 +6,12 @@
     "name": "Sudhanshu Yadav",
     "email": "sudhanshuyadav2@gmail.com"
   },
-  "version": "1.0.3",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/s-yadav/jsonQ"
   },
-  "licenses": [
-    {
-      "type": "MIT"
-    },
-    {
-      "type": "GPL"
-    }
-  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/s-yadav/jsonQ/issues"
   },
@@ -32,7 +25,5 @@
     "extract"
   ],
   "readmeFilename": "README.md",
-  "homepage": "https://github.com/s-yadav/jsonQ",
-  "_id": "jsonq@1.0.0",
-  "_from": "jsonq@"
+  "homepage": "https://github.com/s-yadav/jsonQ"
 }

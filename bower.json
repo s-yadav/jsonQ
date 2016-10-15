@@ -6,7 +6,7 @@
         "name": "Sudhanshu Yadav",
         "email": "sudhanshuyadav2@gmail.com"
     },
-    "version": "1.0.4",
+    "version": "1.1.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/s-yadav/jsonQ"
@@ -14,16 +14,7 @@
     "ignore": [
         "node_modules"
     ],
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "https://github.com/s-yadav/jsonQ/blob/master/MIT-LICENSE.txt"
-        },
-        {
-            "type": "GPLv2",
-            "url": "http://opensource.org/licenses/GPL-2.0"
-        }
-    ],
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/s-yadav/jsonQ/issues"
     },

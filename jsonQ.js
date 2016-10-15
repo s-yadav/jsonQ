@@ -1,12 +1,25 @@
 /*
- *jsonQ.js v 1.0.4
+ *jsonQ.js v 1.1.0
  *Author: Sudhanshu Yadav
  *s-yadav.github.com
- *Copyright (c) 2013 - 2015 Sudhanshu Yadav.
- *Dual licensed under the MIT and GPL licenses
+ *Copyright (c) 2013 - 2016 Sudhanshu Yadav.
+ *MIT licenses
  */
 //initialize jsonQ
-;(function(undefined) {
+;(function(factory) {
+    /** support UMD ***/
+    var global = Function('return this')() || (42, eval)('this');
+    if (typeof define === "function" && define.amd) {
+        define(["jsonq"], function($) {
+            return (global.jsonQ = factory());
+        });
+    } else if (typeof module === "object" && module.exports) {
+        module.exports = factory();
+
+    } else {
+        global.jsonQ = factory();
+    }
+}(function(undefined) {
 
     var jsonQ = function(json) {
         //return a jsonQ object
@@ -27,13 +40,13 @@
                 return val;
             },
             "caseIgnore": true,
-            "allLevel": true //to sort all level if true and if false only lowest level	
+            "allLevel": true //to sort all level if true and if false only lowest level
         }
     };
 
     /*****private functions for internal use only*******/
 
-    //to check weather path b is subset of path a	
+    //to check weather path b is subset of path a
     function matchPath(a, b) {
         var regex = new RegExp('^' + a.join('~~'), 'i');
         return regex.test(b.join('~~'));
@@ -52,14 +65,14 @@
             var lvlpath = path ? JSON.parse(JSON.stringify(path)) : [];
             lvlpath.push(k);
 
-            //to add a new direct access for each key in json so we get the path of that key easily 
+            //to add a new direct access for each key in json so we get the path of that key easily
             if (objType(json) == 'object') {
                 if (keyAdded.indexOf(k) == -1) {
                     keyAdded.push(k);
-                    newJson[k] = [];
+                    newJson.jsonQ_path[k] = [];
                 }
 
-                newJson[k].push({
+                newJson.jsonQ_path[k].push({
                     path: lvlpath
                 });
             }
@@ -139,11 +152,12 @@
             var current = this.jsonQ_current,
                 newObj = this.cloneObj(jsonQ()),
                 newCurrent = newObj.jsonQ_current = [],
+                pathObj = this.jsonQ_path,
 
                 //key element (an array of paths with following key)
                 key = option.key,
                 //dont work with original object clone it and if undefined than make as empty array
-                elm = jsonQ.clone(this[key]) || [],
+                elm = jsonQ.clone(pathObj[key]) || [],
                 //qualifier
                 qualifier = option.qualifier,
                 qType = objType(qualifier),
@@ -153,6 +167,7 @@
 
             for (var i = 0, ln = current.length; i < ln; i++) {
                 var pathC = current[i].path,
+                    pathCTemp = [],
                     found = false;
 
 
@@ -162,11 +177,11 @@
                         continue;
                     }
 
-                    var pathCTemp = pathC.concat([]);
+                    pathCTemp = pathC.concat([]);
                     pathCTemp.pop();
                 }
 
-                //make a loop on element to match the current path and element path	
+                //make a loop on element to match the current path and element path
                 for (var j = 0; j < elm.length; j++) {
                     var pathE = elm[j].path,
                         condition;
@@ -200,7 +215,7 @@
                 }
             }
 
-            //to apply qualifier if it is string . its mainly for array kind of qualifier	
+            //to apply qualifier if it is string . its mainly for array kind of qualifier
             if (qType == "string") {
                 newObj = this.filter.call(newObj, qualifier);
             }
@@ -284,6 +299,7 @@
 
             //to set initial values
             this.jsonQ_root = json;
+            this.jsonQ_path = {};
             this.jsonQ_current = [{
                 path: []
             }];
@@ -337,7 +353,7 @@
             //to return value if called as getter (ie value is undefined)
             if (!value) {
                 var newArray = [];
-                //create a new set of values 
+                //create a new set of values
                 this.each(function(idx, path, val) {
                     newArray.push(val);
                 });
@@ -365,7 +381,7 @@
 
         },
         //clone parameter is for if you want to append any object so append exact object or create clone of object and append
-        //to append in last of values of current	
+        //to append in last of values of current
         append: function(valObj, clone) {
             return this.appendAt("last", valObj, clone);
         },
@@ -418,7 +434,7 @@
                 newCurrent = newObj.jsonQ_current = [],
                 qType = objType(qualifier);
 
-            if (!qualifier) return;
+            if (!qualifier) return this;
 
             for (var i = 0, ln = current.length; i < ln; i++) {
                 var pathC = current[i].path;
@@ -427,7 +443,7 @@
                 tFunc.qTest.call(this, qType, qualifier, pathC, newCurrent);
             }
 
-            //to apply qualifier if it is string . its mainly for array kind of qualifier	
+            //to apply qualifier if it is string . its mainly for array kind of qualifier
             if (qType == 'string') {
                 //to check string for nth and eq
                 var regex = /(nth|eq)\((.+)\)/,
@@ -453,7 +469,7 @@
             return newObj;
 
         },
-        //first argument is key in which you want to search, second key is qualifier of it.	
+        //first argument is key in which you want to search, second key is qualifier of it.
         find: function(key, qualifier) {
             return tFunc.qualTrv.call(this, {
                 method: "find",
@@ -501,7 +517,7 @@
         },
 
 
-        //function to sort array objects	
+        //function to sort array objects
         sort: function(key, settings) {
             //merge global setting with local setting
             settings = jsonQ.merge({}, jsonQ.settings.sort, settings);
@@ -771,11 +787,11 @@
             var type = objType(json);
             return type == 'object' || type == 'array' ? parse(stringify(json)) : json;
         },
-        //to find index of an element in set of element	
+        //to find index of an element in set of element
         index: function(list, elm, isQualifier) {
             var type = objType(elm),
                 ln = list.length,
-                //check that elm is a object or not that is taken by refrence 
+                //check that elm is a object or not that is taken by refrence
                 refObj = type == "object" || type == "array" || type == "function" ? true : false;
 
 
@@ -795,13 +811,13 @@
                     var lType = objType(cur);
                     if (lType != type && !isQualifier) continue;
 
-                    //to compare 
+                    //to compare
                     if (!isQualifier) {
                         if (stringify(jsonQ.order(cur)) == jsonStr) {
                             return i;
                         }
 
-                        //if element is a qualifier	
+                        //if element is a qualifier
                     } else {
                         var test;
                         if (type == 'function') {
@@ -903,8 +919,8 @@
 
         },
 
-        //need to modify it little bit 
-        //By Chris O'Brien, prettycode.org 	
+        //need to modify it little bit
+        //By Chris O'Brien, prettycode.org
         identical: function(a, b) {
 
             function sort(object) {
@@ -979,7 +995,7 @@
             return array;
 
         },
-        //return a new array list of unuiqe(distinct) elements of an array	
+        //return a new array list of unuiqe(distinct) elements of an array
         unique: function(array) {
             var ln = array.length,
                 newAry = [];
@@ -1065,7 +1081,7 @@
         },
         //append functions
 
-        //to append in last of values of array or string	
+        //to append in last of values of array or string
         append: function(target, val, clone) {
             return jsonQ.appendAt(target, "last", val, clone);
         },
@@ -1109,7 +1125,5 @@
     //to assign jsonQ prototypes to init function
     jsonQ.fn.init.prototype = jsonQ.fn;
 
-    //to make jsonQ accessible outside	
-    var global = Function('return this')() || (42, eval)('this');
-    global.jsonQ = jsonQ;
-}());
+    return jsonQ;
+}));
