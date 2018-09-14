@@ -1,5 +1,5 @@
 /*
- *jsonQ.js v 1.1.0
+ *jsonQ.js v 1.2.0
  *Author: Sudhanshu Yadav
  *s-yadav.github.com
  *Copyright (c) 2013 - 2016 Sudhanshu Yadav.
@@ -137,7 +137,7 @@
                 prevPathStr = pathStr;
             }
 
-            //set other defination variables
+            //set other definition variables
             newObj.length = newCurrent.length;
             //to add selector
             newObj.selector.push({
@@ -147,7 +147,7 @@
 
             return newObj;
         },
-        //travese which have qualifiers mainly on bottom and sibling method
+        //traverse which have qualifiers mainly on bottom and sibling method
         qualTrv: function(option) {
             var current = this.jsonQ_current,
                 newObj = this.cloneObj(jsonQ()),
@@ -269,7 +269,7 @@
                 return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
             });
 
-            //to display on decending order
+            //to display on descending order
             if (settings.order.toLowerCase() == "desc") {
                 array.reverse();
             }
@@ -311,7 +311,7 @@
                 refresh: true
             });
 
-            //set jsonQ defination variables
+            //set jsonQ definition variables
             this.length = this.jsonQ_current.length;
             this.selector = [];
 
@@ -360,7 +360,7 @@
 
                 return newArray;
             }
-            //value as setter. value can be the exact value which you want to set or can be a callback. In callback pathvalue will be first argument.
+            //value as setter. value can be the exact value which you want to set or can be a callback. In callback pathValue will be first argument.
             else {
                 var type = objType(value);
                 for (var i = 0, ln = json.length; i < ln; i++) {
@@ -417,7 +417,7 @@
                     parRef[lastKey].splice(idx, 0, valObj);
                 }
 
-                //if string concatinate , if number add
+                //if string concatenate , if number add
                 else if (type == 'string') {
                     var str = parRef[lastKey];
                     parRef[lastKey] = str.substring(0, idx) + valObj + str.substring(idx, objLn);
@@ -457,7 +457,7 @@
                 newObj.jsonQ_current = newCurrent;
             }
 
-            //set other defination variables
+            //set other definition variables
             newObj.length = newCurrent.length;
 
             //to add selector
@@ -549,7 +549,7 @@
                 });
             }
 
-            //to run the loop untill all ar sorted
+            //to run the loop until all are sorted
             var alpha = 0,
 
                 // function to remove element if sorting is done for that path
@@ -743,7 +743,7 @@
             }
 
             var logic = function(val) {
-                //if a json is an array alike and keys are numbers as string type ("1","2" instad of 1,2) convert them to integer.
+                //if a json is an array alike and keys are numbers as string type ("1","2" instead of 1,2) convert them to integer.
                 if (!isNaN(val)) val = parseInt(val);
                 return val;
             },
@@ -791,7 +791,7 @@
         index: function(list, elm, isQualifier) {
             var type = objType(elm),
                 ln = list.length,
-                //check that elm is a object or not that is taken by refrence
+                //check that elm is a object or not that is taken by reference
                 refObj = type == "object" || type == "array" || type == "function" ? true : false;
 
 
@@ -846,7 +846,7 @@
             }
             return -1;
         },
-        //to check an array contains a specfic element or not . an element can be aaray or json.
+        //to check an array contains a specific element or not . an element can be array or json.
         contains: function(array, elm, isQualifier) {
             return jsonQ.index(array, elm, isQualifier) != -1;
         },
@@ -859,7 +859,7 @@
             return true;
         },
 
-        nthElm: function(array, arg, aryRetrn) {
+        nthElm: function(array, arg, aryReturn) {
             var result;
             if (array[arg]) {
                 result = array[arg];
@@ -903,7 +903,7 @@
                 }
             }
             result = result || array;
-            return objType(result) != 'array' && aryRetrn ? [result] : result;
+            return objType(result) != 'array' && aryReturn ? [result] : result;
         },
         prettify: function(obj, htmlReturn) {
 
@@ -911,7 +911,7 @@
                 throw ('Only valid json object is allowed.');
             }
 
-            //to return prtified. If htmlReturn false add 3 spaces else add &nbsp;
+            //to return prettified. If htmlReturn false add 3 spaces else add &nbsp;
             if (htmlReturn) {
                 return JSON.stringify(obj, null, '\t').replace(/\n/g, '</br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
             }
@@ -983,8 +983,8 @@
             }
             return target;
         },
-        //suffle the order of elements in a array. returns the same array.
-        suffle: function(array) {
+        //shuffle the order of elements in a array. returns the same array.
+        shuffle: function(array) {
             for (var i = 1, ln = array.length; i < ln; i++) {
                 var j = Math.floor(Math.random() * (i + 1)),
                     tmp = array[i];
@@ -993,9 +993,12 @@
             }
 
             return array;
-
         },
-        //return a new array list of unuiqe(distinct) elements of an array
+        suffle: function(array) {
+            console.error('This method is deprecated. It was originally a miss spell of shuffle. Use jsonQ.shuffle instead.')
+            jsonQ.shuffle(array);
+        },
+        //return a new array list of unique(distinct) elements of an array
         unique: function(array) {
             var ln = array.length,
                 newAry = [];
@@ -1110,7 +1113,7 @@
                 target.splice(idx, 0, val);
             }
 
-            //if string concatinate , if number add
+            //if string concatenate , if number add
             else if (type == 'string') {
                 target = target.substring(0, idx) + val + target.substring(idx, length);
             }

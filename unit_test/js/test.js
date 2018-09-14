@@ -649,10 +649,10 @@ test('sibling',function(){
 				
 			});
 			
-		test("suffle",function(){
+		test("shuffle",function(){
 				var ary=[1,2,1,3,4,2];
-				ary2=jsonQ.suffle(jsonQ.clone(ary));
-				ok(ary.length==ary2.length && !jsonQ.identical(ary,ary2),'suffle is working right.')
+				ary2=jsonQ.shuffle(jsonQ.clone(ary));
+				ok(ary.length==ary2.length && !jsonQ.identical(ary,ary2),'shuffle is working right.')
 			});
 			
 		test("union",function(){
