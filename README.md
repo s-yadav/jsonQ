@@ -24,4 +24,3 @@ var jsonQ=require("jsonq");
 1. Added UMD Support,
 2. Fixed Major bug #10 (jsonQ method getting overrided if objects have same named keys)
 
-<strong>See documentation on http://ignitersworld.com/lab/jsonQ.html</strong>
